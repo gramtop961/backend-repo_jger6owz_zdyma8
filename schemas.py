@@ -11,8 +11,8 @@ Model name is converted to lowercase for the collection name:
 - BlogPost -> "blogs" collection
 """
 
-from pydantic import BaseModel, Field
-from typing import Optional
+from pydantic import BaseModel, Field, HttpUrl
+from typing import Optional, List
 
 # Example schemas (replace with your own):
 
@@ -38,11 +38,13 @@ class Product(BaseModel):
     category: str = Field(..., description="Product category")
     in_stock: bool = Field(True, description="Whether product is in stock")
 
-# Add your own schemas here:
-# --------------------------------------------------
-
-# Note: The Flames database viewer will automatically:
-# 1. Read these schemas from GET /schema endpoint
-# 2. Use them for document validation when creating/editing
-# 3. Handle all database operations (CRUD) directly
-# 4. You don't need to create any database endpoints!
+# RKP School specific schemas
+class SchoolImage(BaseModel):
+    """
+    School images collection schema
+    Collection name: "schoolimage"
+    """
+    url: HttpUrl = Field(..., description="Publicly accessible image URL")
+    title: Optional[str] = Field(None, description="Optional caption or title")
+    tags: Optional[List[str]] = Field(default_factory=list, description="Tags such as campus, classroom, lab, event")
+    approved: bool = Field(True, description="Whether the image is approved for display")
